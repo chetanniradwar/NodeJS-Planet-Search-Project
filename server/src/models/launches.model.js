@@ -18,8 +18,12 @@ function loadLaunches()
     launches.set(launch.flightNumber , launch) ;
 }
 
-
-module.exports = { launches ,loadLaunches}
+function getAllLaunches()
+{
+    const obj = Array.from( launches.values() )
+    return obj ;
+}
+module.exports = { getAllLaunches ,loadLaunches}
 
 
 

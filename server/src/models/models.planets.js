@@ -13,6 +13,11 @@ function isHabitable(planet)
     else
     return false;
 }
+function getAllPlanets()
+{
+    return planets;
+}
+
 function loadPlanets()
  {
     const csvpath  = path.join(__dirname,"..","..", "data", "kepler_data.csv")
@@ -36,4 +41,4 @@ console.log("Total count" + "  " + count);
 })
  }
 
-module.exports = {planets , loadPlanets} ;
+module.exports = {getAllPlanets , loadPlanets} ;
