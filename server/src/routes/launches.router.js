@@ -1,12 +1,15 @@
 const express = require('express')
 
-const { getLaunches } = require('../controllers/launches.controller')
+const { getLaunches , httpPostLaunches } = require('../controllers/launches.controller')
 
 
 
 const launchesRouter = express.Router() ;
 
 launchesRouter.get('/' , getLaunches )
+
+
+launchesRouter.post('/',httpPostLaunches)
 
 module.exports = launchesRouter ;
 
