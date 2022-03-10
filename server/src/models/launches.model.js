@@ -1,20 +1,21 @@
 const launches = new Map() ;
 // Map preserves the order of keys being added
-let nextFlightNumber =100 ;
+let nextFlightNumber = 100 ;
 const launch = {
-    flightNumber : "100" ,
+    flightNumber : 100 ,
     mission:"Kepler Exploration T" ,
     rocket : "Tesla K9" ,
     launchDate : new Date('March 30, 2022') ,
     target : 'Kepler-442 b' ,
-    customer : ['Tesla' , 'NASA'],
+    customers : ['Tesla' , 'NASA'],
     upcoming : true ,
     success : true,
     
     }
 
 function loadLaunches()
-{
+{     
+    
     launches.set(launch.flightNumber , launch) ;
 }
 
@@ -37,14 +38,28 @@ function postLaunch(launch)
 {
        nextFlightNumber++ ;
        launch.flightNumber = nextFlightNumber ;
-       launch.customer = ["SpaceX" ,"ISRO" , "NASA"]
+       launch.customers = ["SpaceX" ,"ISRO" , "NASA"]
        launch.upcoming = true;
        launch.success = true ;
        launch.launchDate = new Date(launch.launchDate)
        launches.set(launch.flightNumber ,launch)    ;
 
 }
-module.exports = { getAllLaunches ,getLaunch , postLaunch , loadLaunches}
+
+function deleteLaunch(id)
+{
+        if(launches.has(id))
+        {
+             const toAbort = launches.get(id)
+                toAbort.upcoming=false;
+                toAbort.success= false ;
+              return true ;  
+        }
+        else{
+            return false ;
+        }
+}
+module.exports = { getAllLaunches ,getLaunch , postLaunch , loadLaunches ,deleteLaunch}
 
 
 

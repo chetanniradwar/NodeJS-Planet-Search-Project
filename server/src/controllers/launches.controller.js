@@ -1,4 +1,4 @@
-const {getAllLaunches, getLaunch ,postLaunch} = require('../models/launches.model')
+const {getAllLaunches, getLaunch ,postLaunch , deleteLaunch } = require('../models/launches.model')
 
 function getLaunches(req, res)
 {
@@ -54,4 +54,23 @@ function httpPostLaunches(req, res)
                 res.json(launch);
         }
 }
-module.exports = { getLaunches , httpPostLaunches } 
+
+function httpDeleteLaunches(req, res)
+{      
+       
+        const id = req.params.id ;
+
+        if( deleteLaunch(+id) )
+        {
+                res.status=200;
+                res.json({success: " completed"}) ;       
+        }
+        else
+        {
+                res.status = 400;
+                res.json({error : "Cannot delete"})
+        }
+
+
+}
+module.exports = { getLaunches , httpPostLaunches , httpDeleteLaunches } 

@@ -6,7 +6,7 @@ async function httpGetPlanets() {
  let response = await fetch('http://localhost:8000/planets')
     const  planets  = await response.json() ;
 
-    console.log(planets);
+    // console.log(planets);
 return planets ;
 }
 
@@ -20,9 +20,9 @@ async function httpGetLaunches() {
       launches.sort((a,b)=>{
          return a.flightNumber - b.flightNumber ;
           })
-          console.log(launches);
+          // console.log(launches);
         return launches ;
-launches.sort()
+
 
 }
 
@@ -52,6 +52,17 @@ catch(err){
 async function httpAbortLaunch(id) {
   // TODO: Once API is ready.
   // Delete launch with given ID.
+  try{
+    const response = await fetch(`http://localhost:8000/launches/${id}` ,{
+      method:"delete"
+    })
+      return response;
+  
+  }
+  catch(err){
+    return {ok:false }; 
+  }
+
 }
 
 export {
