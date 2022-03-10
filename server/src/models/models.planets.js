@@ -15,6 +15,7 @@ function isHabitable(planet)
 }
 function getAllPlanets()
 {
+    console.log(planets);
     return planets;
 }
 
