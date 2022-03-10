@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "deploy":"npm run build --prefix client&& npm run start --prefix server",
     "server": "npm run watch --prefix server",
     "client": "npm start --prefix client",
     "watch": "npm-run-all -p server client ",
