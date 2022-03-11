@@ -1,8 +1,7 @@
- const planets = [] ;
-
 const fs = require('fs');
 const path = require('path')
 const parser = require('csv-parser')
+const planets = require('./planets.mongo')
 
 function isHabitable(planet)
 {
@@ -13,10 +12,12 @@ function isHabitable(planet)
     else
     return false;
 }
-function getAllPlanets()
+const planetsCount = 0 ;
+async function getAllPlanets()
 {
-    console.log(planets);
-    return planets;
+    const planetsObj =  await planets.find({});
+    planetsCount = planetsObj.length;
+    return planetsObj// return all planets from db no projections
 }
 
 function loadPlanets()
@@ -24,22 +25,34 @@ function loadPlanets()
     const csvpath  = path.join(__dirname,"..","..", "data", "kepler_data.csv")
 
 const stream = fs.createReadStream(csvpath) ;
-let count=0;
 stream.pipe(parser({ 
     skipComments: '#',
     strict: true,
 }))
-.on('data',(planet)=>{
-    // console.log(planet);
+.on('data',async (planet) =>{
     if(isHabitable(planet))
     {
-        count++;
-       planets.push(planet) ;
+           await savePlanet(planet) ; 
     }
 })
 .on('end',(data)=>{
-console.log("Total count" + "  " + count);
+console.log("Total habitable count:" + "  " + planetsCount);
 })
  }
+
+async function savePlanet(planet)
+{
+    try{
+        await planets.updateOne(
+            {kepler_name :data.kepler_name },
+            {kepler_name :data.kepler_name},
+            {upsert:true});
+        
+    }
+    catch(err){
+        console.log(`Could not save palnet to database error:${err}`)
+    }
+}
+
 
 module.exports = {getAllPlanets , loadPlanets} ;
