@@ -1,76 +1,45 @@
-const {getAllLaunches, getLaunch ,postLaunch , deleteLaunch } = require('../models/launches.model')
+const { getAllLaunches, postLaunch, deleteLaunch } = require('../models/launches.model')
 
-function getLaunches(req, res)
-{
-   
-        return res.status(200).json(getAllLaunches()) ;
+async function getLaunches(req, res) {
+        const allLaunches = await getAllLaunches()
+        if (allLaunches)
+                return res.status(200).json(allLaunches);
+        else {
+                return res.status(400).json("No launches")
+        }
 }
 
-function httpPostLaunches(req, res)
-{
-        const launch = req.body ;
+async function httpPostLaunches(req, res) {
+        let launch = req.body;
+        try {
+                launch = await postLaunch(launch)
+        }
+        catch (err) {
+                console.log(err)
+                res.status(400)
+                res.statusMessage = err.message
+                res.json({ error: err.message });
+                return;
+        }
+        res.status(201)
+        res.statusMessage = "Sucessfully Added!"
+        res.json(launch);
+}
 
-        if( launch && launch.launchDate && launch.mission && launch.rocket && launch.target)
-        {
-                if(isNaN(new Date(launch.launchDate)))
-                {
-                        res.status(400)
-                        res.json({error :"Invalid Date"});
-                        return ;
+async function httpDeleteLaunches(req, res) {
+                
+        const id = req.params.id;
+        const response = await deleteLaunch(+id)
+        if(response ==="Success")
+          {
+                        res.status(200);
+                res.json({ success: "completed" });
+                
                 }
-                postLaunch(launch)
-                const newLaunch =  getLaunch(launch.flightNumber );
-                console.log(newLaunch);
-
-               if(newLaunch)
-               {
-                res.status(201)
-                res.statusMessage="Sucessfully Added!"
-                res.json(newLaunch)
-               }
-               else
-               {
-                res.status(400)
-                res.json({error :"error"});
-               }
-
-        }
-        else
-        {       
-                res.status(400)
-                if(!launch)
-                res.statusMessage="Body not found in the request"
-                else   if(isNaN(new Date(launch.launchDate)))
-                res.statusMessage=" Invalid launch date"
-                else   if(!launch.mission)
-                res.statusMessage="Invalid mission"
-                else   if(!launch.rocket)
-                res.statusMessage="Invalid rocket"
-                else   if(!launch.target  )
-                res.statusMessage="Invalid target"
-                else
-                res.statusMessage="error"
-
-                res.json(launch);
+        else {
+                res.status(400) ;
+                res.statusMessage = response ;
+                res.json({ error: response })
         }
 }
-
-function httpDeleteLaunches(req, res)
-{      
-       
-        const id = req.params.id ;
-
-        if( deleteLaunch(+id) )
-        {
-                res.status=200;
-                res.json({success: " completed"}) ;       
-        }
-        else
-        {
-                res.status = 400;
-                res.json({error : "Cannot delete"})
-        }
-
-
-}
-module.exports = { getLaunches , httpPostLaunches , httpDeleteLaunches } 
+module.exports = { getLaunches, httpPostLaunches, httpDeleteLaunches } 

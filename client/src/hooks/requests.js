@@ -17,6 +17,7 @@ async function httpGetLaunches() {
   // Load launches, sort by flight number, and return as JSON.
   let response = await fetch('http://localhost:8000/launches')
   const  launches  = await response.json() ;
+  // console.log(launches);
       launches.sort((a,b)=>{
          return a.flightNumber - b.flightNumber ;
           })
@@ -30,9 +31,9 @@ async function httpSubmitLaunch(launch) {
   // TODO: Once API is ready.
   // Submit given launch data to launch system.
 
-  // console.log(launch) ;
+
 try{
-  const response = await fetch('http://localhost:8000/launch' ,{
+  const response = await fetch('http://localhost:8000/launches' ,{
     method:"post",
     headers :{
               "Content-Type" :"application/json" ,
