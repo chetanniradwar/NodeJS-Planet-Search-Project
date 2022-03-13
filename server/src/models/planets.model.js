@@ -12,11 +12,11 @@ function isHabitable(planet)
     else
     return false;
 }
-const planetsCount = 0 ;
+
 async function getAllPlanets()
 {
     const planetsObj =  await planets.find({});
-    planetsCount = planetsObj.length;
+    
     return planetsObj// return all planets from db no projections
 }
 
@@ -35,8 +35,8 @@ stream.pipe(parser({
            await savePlanet(planet) ; 
     }
 })
-.on('end',(data)=>{
-console.log("Total habitable count:" + "  " + planetsCount);
+.on('end',async (data)=>{
+console.log("Total habitable count:" + "  " + (await planets.find({})).length);
 })
  }
 
@@ -44,8 +44,8 @@ async function savePlanet(planet)
 {
     try{
         await planets.updateOne(
-            {kepler_name :data.kepler_name },
-            {kepler_name :data.kepler_name},
+            {kepler_name :planet.kepler_name },
+            {kepler_name :planet.kepler_name},
             {upsert:true});
         
     }

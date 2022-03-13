@@ -1,65 +1,69 @@
-const launches = new Map() ;
-// Map preserves the order of keys being added
-let nextFlightNumber = 100 ;
+const launches = require('./launches.mongo');
+const planets = require('./planets.mongo')
+
 const launch = {
-    flightNumber : 100 ,
-    mission:"Kepler Exploration T" ,
-    rocket : "Tesla K9" ,
-    launchDate : new Date('March 30, 2022') ,
-    target : 'Kepler-442 b' ,
-    customers : ['Tesla' , 'NASA'],
-    upcoming : true ,
-    success : true,
-    
+    flightNumber: 100,
+    mission: "Kepler Exploration T",
+    rocket: "Tesla K9",
+    launchDate: new Date('March 30, 2022'),
+    target: 'Kepler-442 b',
+    customers: ['Tesla', 'NASA'],
+    upcoming: true,
+    success: true,
+
+}
+
+async function loadLaunches() {
+    try {
+        await launches.updateOne({ flightNumber: 100 }, launch, { upsert: true });
     }
-
-function loadLaunches()
-{     
-    
-    launches.set(launch.flightNumber , launch) ;
+    catch (err) {
+        console.log(`Error --> ${err}`)
+    }
 }
 
-function getAllLaunches()
-{
-    const obj = Array.from( launches.values() )
-    return obj ;
+async function getAllLaunches() {
+    const allLaunches = await launches.find({},{__v:0 ,_id:0})
+    return allLaunches;
 }
 
-function getLaunch(flightNumber)
-{
-    console.log(launches.get(flightNumber)) ;
-    if(launches.get(flightNumber))
-    return launches.get(flightNumber)
-    else
-    return null;
+
+async function postLaunch(launch) {
+        const planetexists = await planets.findOne({ kepler_name: launch.target },{},{})
+    if (!planetexists)
+        throw new Error("Planet is not listed")
+
+    const lastEntry = await launches.findOne().sort('-flightNumber');
+
+    // console.log(lastEntry);
+    const nextFlightNumber = lastEntry.flightNumber + 1;
+    launch.flightNumber = nextFlightNumber;
+    launch.customers = ["SpaceX", "ISRO", "NASA"]
+    launch.upcoming = true;
+    launch.success = true;
+    launch.launchDate = new Date(launch.launchDate)
+
+    try {
+        await launches.create(launch);
+    }
+    catch (err) {
+        throw new Error(err)
+    }
+    return launch;
+
 }
 
-function postLaunch(launch)
-{
-       nextFlightNumber++ ;
-       launch.flightNumber = nextFlightNumber ;
-       launch.customers = ["SpaceX" ,"ISRO" , "NASA"]
-       launch.upcoming = true;
-       launch.success = true ;
-       launch.launchDate = new Date(launch.launchDate)
-       launches.set(launch.flightNumber ,launch)    ;
+async function deleteLaunch(id) {
+    const response = await launches.updateOne({ flightNumber: id }, { upcoming: false, success: false },)
+    if (response.matchedCount == 0)
+        return "Launch does not exist"
+    if (!response.acknowledged)
+        return "Write Assess Disabled"
+
+    return "Success"
 
 }
-
-function deleteLaunch(id)
-{
-        if(launches.has(id))
-        {
-             const toAbort = launches.get(id)
-                toAbort.upcoming=false;
-                toAbort.success= false ;
-              return true ;  
-        }
-        else{
-            return false ;
-        }
-}
-module.exports = { getAllLaunches ,getLaunch , postLaunch , loadLaunches ,deleteLaunch}
+module.exports = { getAllLaunches, postLaunch, loadLaunches, deleteLaunch }
 
 
 
