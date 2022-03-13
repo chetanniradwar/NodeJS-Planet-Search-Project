@@ -20,7 +20,6 @@ const launchesSchema = new mongoose.Schema({
     },
     target :{
         type:String,
-        required : true
     },
     customers :{
         type :[String] ,
@@ -32,9 +31,8 @@ const launchesSchema = new mongoose.Schema({
     },
     success:{
         type :Boolean,
-        required:true,
         default:true 
-    } ,
+    } 
 })
 
 module.exports = mongoose.model('Launch',launchesSchema) ;
