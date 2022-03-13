@@ -1,7 +1,9 @@
 const { getAllLaunches, postLaunch, deleteLaunch } = require('../models/launches.model')
 
 async function getLaunches(req, res) {
-        const allLaunches = await getAllLaunches()
+
+       const { page, limit }= req.query  ;
+        const allLaunches = await getAllLaunches(page ,limit)
         if (allLaunches)
                 return res.status(200).json(allLaunches);
         else {

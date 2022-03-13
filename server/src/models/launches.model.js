@@ -1,6 +1,7 @@
 const axios = require('axios')
 const launches = require('./launches.mongo');
 const planets = require('./planets.mongo')
+const { getPagination } = require('../services/query')
 const launch = {
     flightNumber: 1000,  // flight_number
     mission: "Kepler Exploration T",// name
@@ -92,8 +93,15 @@ async function loadLaunches() {
     }
 }
 
-async function getAllLaunches() {
+
+
+async function getAllLaunches(page , limit) {
+    const {toSkip , toLimit } = getPagination(page ,limit )
     const allLaunches = await launches.find({},{__v:0 ,_id:0})
+    .sort( {flightNumber : 1 })
+    .skip(toSkip)
+    .limit(toLimit)
+
     return allLaunches;
 }
 
