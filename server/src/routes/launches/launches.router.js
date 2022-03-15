@@ -1,6 +1,6 @@
 const express = require('express')
 
-const { getLaunches , httpPostLaunches ,httpDeleteLaunches } = require('../controllers/launches.controller')
+const { getLaunches , httpPostLaunches ,httpDeleteLaunches } = require('../../controllers/launches.controller')
 
 
 
