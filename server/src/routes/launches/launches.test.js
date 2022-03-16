@@ -8,9 +8,7 @@ beforeAll(async ()=>{
     await connectDB();
 })
 
-afterAll(async ()=>{
-    await disconnectDB();
-})
+
 
 describe("Test GET/launches" , () =>{
    test('It should respond with 200 success', async () =>{
@@ -75,6 +73,11 @@ const launchDataWithoutDate =
         // expect(response.body).toStrictEqual({error:"Invalid Date"})
     })
 
+})
+
+
+afterAll(async ()=>{
+    await disconnectDB();
 })
 
 })

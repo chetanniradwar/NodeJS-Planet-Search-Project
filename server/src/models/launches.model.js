@@ -110,11 +110,15 @@ async function postLaunch(launch) {
         // const planetexists = await planets.findOne({ kepler_name: launch.target },{},{})
     // if (!planetexists)
     //     throw new Error("Planet is not listed")
+    let nextFlightNumber =1001 ;
 
     const lastEntry = await launches.findOne().sort('-flightNumber');
-
+    
     // console.log(lastEntry);
-    const nextFlightNumber = lastEntry.flightNumber + 1;
+    
+    if(lastEntry)
+    nextFlightNumber= lastEntry.flightNumber + 1;
+
     launch.flightNumber = nextFlightNumber;
     launch.customers = ["SpaceX", "ISRO", "NASA"]
     launch.upcoming = true;
