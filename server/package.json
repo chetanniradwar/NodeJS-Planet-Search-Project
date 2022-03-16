@@ -5,7 +5,7 @@
   "main": "src/server.js",
   "scripts": {
     "watch": " nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --detectOpenHandles",
     "start": "node src/server.js"
   },
   "keywords": [],
@@ -21,6 +21,8 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "jest": "^27.5.1",
+    "nodemon": "^2.0.15",
+    "supertest": "^6.2.2"
   }
 }

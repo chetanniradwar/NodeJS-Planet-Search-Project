@@ -107,9 +107,9 @@ async function getAllLaunches(page , limit) {
 
 
 async function postLaunch(launch) {
-        const planetexists = await planets.findOne({ kepler_name: launch.target },{},{})
-    if (!planetexists)
-        throw new Error("Planet is not listed")
+        // const planetexists = await planets.findOne({ kepler_name: launch.target },{},{})
+    // if (!planetexists)
+    //     throw new Error("Planet is not listed")
 
     const lastEntry = await launches.findOne().sort('-flightNumber');
 
