@@ -1,3 +1,4 @@
+const supertest = require('supertest')
 const request = require('supertest')
 const app = require('../../app')
 const {connectDB, disconnectDB} = require('../../services/mongo')
@@ -9,8 +10,14 @@ beforeAll(async ()=>{
 })
 
 
+afterAll(async ()=>{
+    await disconnectDB();
+    console.log("Successfully disconnected");
+})
 
 describe("Test GET/launches" , () =>{
+
+
    test('It should respond with 200 success', async () =>{
         const response = await request(app)
         .get('/launches')
@@ -73,11 +80,6 @@ const launchDataWithoutDate =
         // expect(response.body).toStrictEqual({error:"Invalid Date"})
     })
 
-})
-
-
-afterAll(async ()=>{
-    await disconnectDB();
 })
 
 })
