@@ -21,7 +21,8 @@
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "mongoose": "^6.2.5",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "nodejs_planet_search_project": "file:.."
   },
   "devDependencies": {
     "jest": "^27.5.1",
